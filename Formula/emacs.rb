@@ -12,27 +12,24 @@ class Emacs < Formula
     depends_on "automake" => :build
   end
 
-  option "with-cocoa", "Build a Cocoa version of emacs"
-  option "with-ctags", "Don't remove the ctags executable that emacs provides"
-  option "without-libxml2", "Don't build with libxml2 support"
+  option "with-ctags", "Do not remove the ctags executable provided by emacs"
+  option "with-modules", "Build with dynamic modules support"
+  option "with-x11", "Build with X11 support (implies --without-cocoa)"
+  option "without-cocoa", "Build without Cocoa support"
+  option "without-libxml2", "Build without libxml2 support"
 
-  depends_on "pkg-config" => :build
-  depends_on :x11 => :optional
   depends_on "dbus" => :optional
   depends_on "gnutls" => :optional
-  depends_on "librsvg" => :optional
   depends_on "imagemagick" => :optional
+  depends_on "librsvg" => :recommended
   depends_on "mailutils" => :optional
+  depends_on "pkg-config" => :build
+  depends_on :x11 => :optional
 
   # https://github.com/Homebrew/homebrew/issues/37803
   if build.with? "x11"
-    depends_on "freetype" => :recommended
-    depends_on "fontconfig" => :recommended
-  end
-
-  fails_with :llvm do
-    build 2334
-    cause "Duplicate symbol errors while linking."
+    depends_on "freetype"
+    depends_on "fontconfig"
   end
 
   def install
@@ -44,36 +41,41 @@ class Emacs < Formula
       --prefix=#{prefix}
     ]
 
-    if build.with? "libxml2"
-      args << "--with-xml2"
-    else
-      args << "--without-xml2"
+    %W[
+      libxml2 xml2
+      dbus dbus
+      gnutls gnutls
+      librsvg rsvg
+      imagemagick imagemagick
+    ].each_slice(2) do |option, feature|
+      if build.with? option
+        args << "--with-#{feature}"
+      else
+        args << "--without-#{feature}"
+      end
     end
 
-    if build.with? "dbus"
-      args << "--with-dbus"
+    args << "--without-pop" if build.with? "mailutils"
+
+    if build.with?("x11")
+      ENV.append "LDFLAGS", "-lfreetype -lfontconfig"
+      args << "--with-x" << "--without-gif" << "--without-tiff" << "--without-jpeg"
     else
-      args << "--without-dbus"
+      args << "--without-x"
     end
 
-    if build.with? "gnutls"
-      args << "--with-gnutls"
+    if build.with?("cocoa") && build.without?("x11")
+      args << "--with-ns" << "--disable-ns-self-contained"
     else
-      args << "--without-gnutls"
+      args << "--without-ns"
     end
-
-    args << "--with-rsvg" if build.with? "librsvg"
-    args << "--with-imagemagick" if build.with? "imagemagick"
-    args << "--without-popmail" if build.with? "mailutils"
 
     system "./autogen.sh" if build.head? || build.devel?
+    system "./configure", *args
+    system "make"
+    system "make", "install"
 
-    if build.with? "cocoa"
-      args << "--with-ns" << "--disable-ns-self-contained"
-      system "./configure", *args
-      system "make"
-      system "make", "install"
-
+    if build.with?("cocoa") && build.without?("x11")
       prefix.install "nextstep/Emacs.app"
 
       # Replace the symlink with one that avoids starting Cocoa.
@@ -82,22 +84,6 @@ class Emacs < Formula
         #!/bin/bash
         exec #{prefix}/Emacs.app/Contents/MacOS/Emacs "$@"
       EOS
-    else
-      if build.with? "x11"
-        # These libs are not specified in xft's .pc. See:
-        # https://trac.macports.org/browser/trunk/dports/editors/emacs/Portfile#L74
-        # https://github.com/Homebrew/homebrew/issues/8156
-        ENV.append "LDFLAGS", "-lfreetype -lfontconfig"
-        args << "--with-x"
-        args << "--with-gif=no" << "--with-tiff=no" << "--with-jpeg=no"
-      else
-        args << "--without-x"
-      end
-      args << "--without-ns"
-
-      system "./configure", *args
-      system "make"
-      system "make", "install"
     end
 
     # Follow MacPorts and don't install ctags from Emacs. This allows Vim
@@ -105,14 +91,6 @@ class Emacs < Formula
     if build.without? "ctags"
       (bin/"ctags").unlink
       (man1/"ctags.1.gz").unlink
-    end
-  end
-
-  def caveats
-    if build.with? "cocoa" then <<-EOS.undent
-      A command line wrapper for the cocoa app was installed to:
-        #{bin}/emacs
-      EOS
     end
   end
 
