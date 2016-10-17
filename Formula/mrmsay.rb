@@ -4,7 +4,7 @@ class Mrmsay < Formula
   desc "MrM's wisdom in your terminal"
   homepage "https://github.com/janeappleseed/MrMsay"
   url "https://github.com/janeappleseed/MrMsay/archive/v0.3.tar.gz"
-  sha256 "492e900fb6c94d8322c9968a6c4a8e147e1ece7ac276c23169ffbcf203aadcfd"
+  sha256 "2f8ac95f61ebec5798ac9feb8eb0c4217fe9a07511d2f54684921466a3bd1f5b"
 
   depends_on "cowsay" => :run
   depends_on :python3
