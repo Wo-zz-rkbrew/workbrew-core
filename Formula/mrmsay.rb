@@ -3,8 +3,8 @@ class Mrmsay < Formula
 
   desc "MrM's wisdom in your terminal"
   homepage "https://github.com/janeappleseed/MrMsay"
-  url "https://github.com/janeappleseed/MrMsay/archive/v0.2.tar.gz"
-  sha256 "7c58b514bbf659580e7e59e010b1200be3a8e3e252303e3e423639c23d15c090"
+  url "https://github.com/janeappleseed/MrMsay/archive/v0.3.tar.gz"
+  sha256 "492e900fb6c94d8322c9968a6c4a8e147e1ece7ac276c23169ffbcf203aadcfd"
 
   depends_on "cowsay" => :run
   depends_on :python3
@@ -12,6 +12,11 @@ class Mrmsay < Formula
   resource "arrow" do
     url "https://files.pythonhosted.org/packages/58/91/21d65af4899adbcb4158c8f0def8ce1a6d18ddcd8bbb3f5a3800f03b9308/arrow-0.8.0.tar.gz"
     sha256 "b210c17d6bb850011700b9f54c1ca0eaf8cbbd441f156f0cd292e1fbda84e7af"
+  end
+
+  resource "daemonize" do
+    url "https://files.pythonhosted.org/packages/84/15/923e3fe48239adf5d697c29e04a3f868d3e4ce8539aab29d6abe784db5be/daemonize-2.4.7.tar.gz"
+    sha256 "c0194e861826be456c7c69985825ac7b79632d8ac7ad4cde8e12fee7971468c8"
   end
 
   resource "peewee" do
