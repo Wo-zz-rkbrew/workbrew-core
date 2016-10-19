@@ -6,6 +6,11 @@ class Mrmsay < Formula
   url "https://github.com/janeappleseed/MrMsay/archive/v0.3.tar.gz"
   sha256 "2f8ac95f61ebec5798ac9feb8eb0c4217fe9a07511d2f54684921466a3bd1f5b"
 
+  bottle do
+    root_url "https://workbrew.bintray.com/bottles"
+    sha256 "42da8114022ec9810f0e965396ed1f409cd10d9e6b4c7f9af8b1040cb18b494f" => :sierra
+  end
+
   depends_on "cowsay" => :run
   depends_on :python3
 
