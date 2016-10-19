@@ -5,6 +5,11 @@ class Emacs < Formula
   mirror "https://ftp.gnu.org/gnu/emacs/emacs-25.1.tar.xz"
   sha256 "19f2798ee3bc26c95dca3303e7ab141e7ad65d6ea2b6945eeba4dbea7df48f33"
 
+  bottle do
+    root_url "https://workbrew.bintray.com/bottles"
+    sha256 "96467571cefc235c044e789e9dee42df4e13377c704e4173000c8282f43fb71f" => :sierra
+  end
+
   head do
     url "https://github.com/emacs-mirror/emacs.git"
 
