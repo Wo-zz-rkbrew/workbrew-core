@@ -5,6 +5,8 @@ class BrowserAT11 < Formula
   version "1.1.0"
   sha256 "be0b4e42b31476dd2411d40fb66d95fc4dba5b5c0b72e798414bcf956526eb50"
 
+  bottle :unneeded
+
   def install
     bin.install "browser"
   end
