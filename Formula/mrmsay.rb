@@ -8,7 +8,7 @@ class Mrmsay < Formula
 
   bottle do
     root_url "https://workbrew.bintray.com/bottles"
-    sha256 "42da8114022ec9810f0e965396ed1f409cd10d9e6b4c7f9af8b1040cb18b494f" => :sierra
+    sha256 "36e24baee8adac3f37e087f2d8afb270626dbc7c45be78ee81b10b30b854fb74" => :sierra
   end
 
   depends_on "cowsay" => :run
