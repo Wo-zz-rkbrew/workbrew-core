@@ -5,6 +5,8 @@ class Browser < Formula
   version "1.0.0"
   sha256 "4fde3bb9c9ef97e8955eee8d7d1f6147d55b141500a5a7576ff6c341d3ec3cdb"
 
+  bottle :unneeded
+
   def install
     bin.install "browser"
   end
